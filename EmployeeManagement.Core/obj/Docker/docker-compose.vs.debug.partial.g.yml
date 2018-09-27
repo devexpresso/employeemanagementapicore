@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  employeemanagement.api:
+    image: employeemanagementapi:dev
+    build:
+      target: base
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      #- NUGET_FALLBACK_PACKAGES=$container_paths_to_fallback_packages_employeemanagement.api$
+    volumes:
+      - C:\devxpresso\technicalcontent\employeemanagementapicore\EmployeeManagement.Core\EmployeeManagement.Api:/app
+      - C:\Users\joyde\vsdbg\vs2017u5:/remote_debugger:ro
+#$nuget_volume_mapping_employeemanagement.api$
+    entrypoint: tail -f /dev/null
+    labels:
+      com.microsoft.visualstudio.debuggee.program: "dotnet"
+      #com.microsoft.visualstudio.debuggee.arguments: " $debuggee_arguments_probing_paths_employeemanagement.api$ bin/Debug/netcoreapp2.1/EmployeeManagement.Api.dll"
+      com.microsoft.visualstudio.debuggee.workingdirectory: "/app"
+      com.microsoft.visualstudio.debuggee.killprogram: "/bin/bash -c \"if PID=$$(pidof -x dotnet); then kill $$PID; fi\""
