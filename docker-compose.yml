@@ -2,7 +2,8 @@ version: '3.4'
 
 services:
   employeemanagement.api:
-    image: ${DOCKER_REGISTRY}employeemanagementapi
+    image: employeemanagementapi
+    container_name: acrnetmigration.azurecr.io
     build:
       context: .
-      dockerfile: EmployeeManagement.Api/Dockerfile
+      dockerfile: EmployeeManagement.Core/EmployeeManagement.Api/Dockerfile
