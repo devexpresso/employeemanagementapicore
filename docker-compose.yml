@@ -6,4 +6,4 @@ services:
     container_name: acrnetmigration.azurecr.io
     build:
       context: .
-      dockerfile: EmployeeManagement.Core/EmployeeManagement.Api/Dockerfile
+      dockerfile: EmployeeManagement.Core/Dockerfile
