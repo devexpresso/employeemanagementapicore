@@ -3,6 +3,7 @@ services:
     build:
       context: C:\devxpresso\technicalcontent\employeemanagementapicore\EmployeeManagement.Core
       dockerfile: EmployeeManagement.Api/Dockerfile
+    container_name: acrnetmigration.azurecr.io
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     image: employeemanagementapi

@@ -1,22 +1,23 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
-WORKDIR /app
-EXPOSE 80
-
 FROM microsoft/dotnet:2.1-sdk AS build
-WORKDIR /src
-COPY ["EmployeeManagement.Api/EmployeeManagement.Api.csproj", "EmployeeManagement.Api/"]
-COPY ["EmployeeManagement.Model/*.csproj", "EmployeeManagement.Model/"]
-COPY ["EmployeeManagement.Provider/*.csproj", "EmployeeManagement.Provider/"]
-COPY ["EmployeeManagement.Repository/*.csproj", "EmployeeManagement.Repository/"]
-RUN dotnet restore ".\EmployeeManagement.Api\*.csproj"
-COPY . .
-WORKDIR "/src/EmployeeManagement.Api"
-RUN dotnet build "EmployeeManagement.Api.csproj" -c Release -o /app
-
-FROM build AS publish
-RUN dotnet publish "EmployeeManagement.Api.csproj" -c Release -o /app
-
-FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
+
+COPY EmployeeManagement.Core/*.sln .
+COPY EmployeeManagement.Core/EmployeeManagement.Api/*.csproj  ./EmployeeManagement.Api/
+COPY EmployeeManagement.Core/EmployeeManagement.Model/*.csproj ./EmployeeManagement.Model/
+COPY EmployeeManagement.Core/EmployeeManagement.Provider/*.csproj ./EmployeeManagement.Provider/
+COPY EmployeeManagement.Core/EmployeeManagement.Repository/*.csproj ./EmployeeManagement.Repository/
+RUN dotnet restore
+
+
+COPY EmployeeManagement.Core/EmployeeManagement.Api/. ./EmployeeManagement.Api/
+COPY EmployeeManagement.Core/EmployeeManagement.Model/. ./EmployeeManagement.Model/
+COPY EmployeeManagement.Core/EmployeeManagement.Provider/. ./EmployeeManagement.Provider/
+COPY EmployeeManagement.Core/EmployeeManagement.Repository/. ./EmployeeManagement.Repository/
+WORKDIR /app/EmployeeManagement.Api
+RUN dotnet publish -c Release -o /app
+
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS runtime
+WORKDIR /app
+COPY --from=build /app .
 ENTRYPOINT ["dotnet", "EmployeeManagement.Api.dll"]
+
