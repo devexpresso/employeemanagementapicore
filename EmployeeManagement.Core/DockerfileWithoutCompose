@@ -1,0 +1,23 @@
+FROM microsoft/dotnet:2.1-sdk AS build
+WORKDIR /app
+
+COPY *.sln .
+COPY EmployeeManagement.Api/*.csproj  ./EmployeeManagement.Api/
+COPY EmployeeManagement.Model/*.csproj ./EmployeeManagement.Model/
+COPY EmployeeManagement.Provider/*.csproj ./EmployeeManagement.Provider/
+COPY EmployeeManagement.Repository/*.csproj ./EmployeeManagement.Repository/
+RUN dotnet restore
+
+
+COPY EmployeeManagement.Api/. ./EmployeeManagement.Api/
+COPY EmployeeManagement.Model/. ./EmployeeManagement.Model/
+COPY EmployeeManagement.Provider/. ./EmployeeManagement.Provider/
+COPY EmployeeManagement.Repository/. ./EmployeeManagement.Repository/
+WORKDIR /app/EmployeeManagement.Api
+RUN dotnet publish -c Release -o /app
+
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS runtime
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "EmployeeManagement.Api.dll"]
+
