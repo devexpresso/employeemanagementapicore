@@ -1,4 +1,4 @@
 name: employeemanagementapi
-home: https://github.com/devexpresso/employeemanagementapicore/tree/master/charts/employeemanagementapi
+home: https://github.com/devexpresso/employeemanagementapicore/tree/master/buildfile
 description: A Helm chart for Kubernetes
 version: 1.0
